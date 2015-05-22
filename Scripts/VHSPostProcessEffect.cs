@@ -1,51 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 [RequireComponent (typeof(Camera))]
-public class VHSPostProcessEffect : PostEffectsBase {
-	static Material m_Material = null;
-	protected Material material {
-		get {
-			if (m_Material == null) {
-				m_Material = new Material(shader);
-				m_Material.SetTexture("_VHSTex", VHS);
-				m_Material.hideFlags = HideFlags.DontSave;
-			}
-			return m_Material;
-		} 
-	}
 
+public class VHSPostProcessEffect : PostEffectsBase{
+	Material m;
 	public Shader shader;
-	public MovieTexture VHS;
+
+	public Texture[] vhsFrames;
+	public float videoTime = 0;
 
 	float yScanline, xScanline;
 
-	public override void Start() {
-		//m = new Material(shader);
-		//m.SetTexture("_VHSTex", VHS);
-		//m.hideFlags = HideFlags.DontSave;
-		VHS.loop = true;
-		VHS.Play();
+	public void Start() {
+		m = new Material(shader);
+		m.SetTexture("_VHSTex", vhsFrames[0]);
 	}
 
 	void OnRenderImage(RenderTexture source, RenderTexture destination){
-		yScanline += Time.deltaTime * 0.01f;
+		yScanline += Time.deltaTime * 0.1f;
 		xScanline -= Time.deltaTime * 0.1f;
-
+		videoTime += Time.deltaTime *100;
+		
+		if (videoTime >= vhsFrames.Length){
+			videoTime = 0;
+		}
+		
+		m.SetTexture("_VHSTex", vhsFrames[(int)videoTime]);
 		if(yScanline >= 1){
 			yScanline = Random.value;
 		}
 		if(xScanline <= 0 || Random.value < 0.05){
 			xScanline = Random.value;
 		}
-		material.SetFloat("_yScanline", yScanline);
-		material.SetFloat("_xScanline", xScanline);
-		Graphics.Blit(source, destination, material);
+		m.SetFloat("_yScanline", yScanline);
+		m.SetFloat("_xScanline", xScanline);
+		Graphics.Blit(source, destination, m);
 	}
-
-	protected void OnDisable() {
-		if( m_Material ) {
-			DestroyImmediate( m_Material );
-		}
-	}	
 }
