@@ -1,9 +1,13 @@
 # unity-vhsglitch
 glitched VHS post-processing shader for Unity3D
 
-Updated to work on mobile, changed the glitch.mp4 file to a series of png files/
+Updated to work on mobile, changed the glitch.mp4 file to a series of png files.
 
-Increases size and performance cost, but only by a little.
+Increases file size (~770KB to 3.3MB) and performance cost, but only by a little.
+
+Example:
+
+![alt tag](http://img.itch.io/aW1hZ2UvMjQ2NTUvOTg2ODQuZ2lm/315x250%23/mfyS9v.gif)
 
 This work is licensed under a Creative Commons Attribution 3.0 Unported License.
 http://creativecommons.org/licenses/by/3.0/deed.en_GB
